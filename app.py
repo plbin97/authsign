@@ -1,8 +1,6 @@
 from flask import Flask, send_from_directory
 from flask_cors import CORS, cross_origin
 
-from matplotlib import pyplot as plt
-
 app = Flask(__name__, static_folder='client/build', static_url_path='')
 cors = CORS(app)
 
@@ -13,4 +11,4 @@ def serve():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0', port=8088)
