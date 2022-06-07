@@ -9,7 +9,7 @@ RUN apt-get update -y && \
 
 COPY . /app
 
-WORKDIR /app/client
+WORKDIR /app/src/client
 
 RUN npm install && \
     npm run build
