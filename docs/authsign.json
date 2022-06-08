@@ -1,0 +1,262 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is the API documentation of Authsign",
+    "version": "0.0.1",
+    "title": "Authsign"
+  },
+  "host": "authsign.teenet.me",
+  "basePath": "/authsign",
+  "tags": [
+    {
+      "name": "user",
+      "description": "operation on user"
+    }
+  ],
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/user": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Get self user",
+        "description": "get self User object",
+        "produces": [
+          "application/json"
+        ],
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "401": {
+            "description": "Token missing or expired"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Sign up",
+        "description": "passing the username and password, then sign up",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "text/plain"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Body",
+            "description": "username and password",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string",
+                  "example": "linbinpang"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "thisismypassword"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "sign up successful"
+          },
+          "400": {
+            "description": "sign up failed",
+            "schema": {
+              "type": "string",
+              "example": "Your username has already been used. "
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Edit user's profile",
+        "description": "Passing the user's profile then update",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "text/plain"
+        ],
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "user's profile, all fields are not required. You just need to passing the fields in which you wana update for",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "well done"
+          },
+          "400": {
+            "description": "update failed",
+            "schema": {
+              "type": "object",
+              "example": {
+                "username": "The username has already been used",
+                "email": "Your email does not follows the right format"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/login": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "User login",
+        "description": "Passing the username and password, then get the access token",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "text/plain"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Body",
+            "description": "username and password",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string",
+                  "example": "linbinpang"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "thisismypassword"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfully login",
+            "schema": {
+              "type": "string",
+              "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+            },
+            "headers": {
+              "X-Expires-After": {
+                "type": "string",
+                "format": "date-time",
+                "description": "date in UTC when token expires"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid username/password"
+          }
+        }
+      }
+    },
+    "/user/logout": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "User logout",
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "description": "Disable the access token",
+        "produces": [
+          "text/plain"
+        ],
+        "responses": {
+          "200": {
+            "description": "successfully logout"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "User": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "User's unique id, cannot be changed after user has been created. "
+        },
+        "username": {
+          "type": "string",
+          "description": "User's name, unique. "
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "emailVerified": {
+          "type": "boolean"
+        },
+        "password": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "role": {
+          "type": "integer",
+          "description": "0 represent administrator, 1 represent normal user"
+        }
+      },
+      "xml": {
+        "name": "User"
+      }
+    }
+  },
+  "securityDefinitions": {
+    "APIKeyHeader": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "X-API-Key"
+    }
+  }
+}
