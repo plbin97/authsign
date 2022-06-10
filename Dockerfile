@@ -9,7 +9,7 @@ RUN apt-get update -y && \
 
 COPY . /app
 
-WORKDIR /app/src/client
+WORKDIR /app/src/authsign/client
 
 RUN npm install && \
     npm run build
@@ -17,6 +17,8 @@ RUN npm install && \
 WORKDIR /app
 
 RUN pip3 install -r requirements.txt
+
+RUN flask db upgrade
 
 ENTRYPOINT [ "python3" ]
 
