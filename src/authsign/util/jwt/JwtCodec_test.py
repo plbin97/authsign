@@ -6,10 +6,11 @@ def test_ifWorking():
     jwtCodec1 = JwtCodec.newJwt(userID=userID)
     jwt = jwtCodec1.encodeToJwtStr()
     assert len(jwt) > 1
+    assert len(jwtCodec1.jwtTemp) > 1
+    assert jwtCodec1.getJwtHash() > 1
 
     jwtCodec2 = JwtCodec.fromJwtStr(jwt)
 
-    assert jwtCodec1.jwtID == jwtCodec2.jwtID
     assert abs((jwtCodec1.utcTimeOfIssue - jwtCodec2.utcTimeOfIssue).total_seconds()) < 60
     assert abs((jwtCodec1.utcTimeOfExpire - jwtCodec2.utcTimeOfExpire).total_seconds()) < 60
     assert jwtCodec1.role == jwtCodec2.role

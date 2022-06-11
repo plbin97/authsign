@@ -1,15 +1,14 @@
 from datetime import datetime, timedelta
 import jwt
 from .jwtSecret import jwtSecret
-import shortuuid
 
 
 class JwtCodec:
     userID: int
-    jwtID: int
     utcTimeOfIssue: datetime
     utcTimeOfExpire: datetime
     role: int
+    jwtTemp: str = ''
 
     def __init__(
             self,
@@ -17,10 +16,8 @@ class JwtCodec:
             utcTimeOfIssue: datetime,
             utcTimeOfExpire: datetime,
             role: int,
-            jwtID: int
     ):
         self.userID = userID
-        self.jwtID = jwtID
         self.utcTimeOfIssue = utcTimeOfIssue
         self.utcTimeOfExpire = utcTimeOfExpire
         self.role = role
@@ -38,12 +35,10 @@ class JwtCodec:
             return None
 
         userID = jwtPayload['userID']
-        jwtID = jwtPayload['jwtID']
         utcTimeOfIssue = datetime.strptime(jwtPayload['utcTimeOfIssue'], '%c')
         utcTimeOfExpire = datetime.strptime(jwtPayload['utcTimeOfExpire'], '%c')
         role = jwtPayload['role']
-        return cls(userID=userID, utcTimeOfIssue=utcTimeOfIssue, utcTimeOfExpire=utcTimeOfExpire, role=role,
-                   jwtID=jwtID)
+        return cls(userID=userID, utcTimeOfIssue=utcTimeOfIssue, utcTimeOfExpire=utcTimeOfExpire, role=role)
 
     @classmethod
     def newJwt(
@@ -58,7 +53,6 @@ class JwtCodec:
             utcTimeOfIssue=utcTimeOfIssue,
             utcTimeOfExpire=utcTimeOfExpire,
             role=role,
-            jwtID=shortuuid.uuid()
         )
 
     def isExpired(self) -> bool:
@@ -75,11 +69,22 @@ class JwtCodec:
         Encode the data into Jwt string
         :return:
         """
+        if self.jwtTemp != '':
+            return self.jwtTemp
         jwtPayload: dict = {
             'utcTimeOfIssue': self.utcTimeOfIssue.strftime('%c'),
             'utcTimeOfExpire': self.utcTimeOfExpire.strftime('%c'),
-            'jwtID': self.jwtID,
             'userID': self.userID,
             'role': self.role
         }
-        return jwt.encode(jwtPayload, jwtSecret, 'HS256')
+        self.jwtTemp = jwt.encode(jwtPayload, jwtSecret, 'HS256')
+        return self.jwtTemp
+
+    def getJwtHash(self) -> int:
+        """
+        Get the hash of JWT
+        :return:
+        """
+        if self.jwtTemp != '':
+            return hash(self.jwtTemp)
+        return hash(self.encodeToJwtStr())
