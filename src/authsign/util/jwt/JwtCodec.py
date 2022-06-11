@@ -35,7 +35,7 @@ class JwtCodec:
         try:
             jwtPayload: dict = jwt.decode(jwtEncodedStr, jwtSecret, algorithms='HS256')
         except:
-            raise Exception('Jwt is invalid')
+            return None
 
         userID = jwtPayload['userID']
         jwtID = jwtPayload['jwtID']

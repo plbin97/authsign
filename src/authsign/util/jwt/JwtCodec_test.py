@@ -21,3 +21,7 @@ def test_ifExpired():
     fakeExpireTime = datetime.utcnow() - timedelta(hours=3)
     jwtCodec = JwtCodec.newJwt(userID=userID, utcTimeOfExpire=fakeExpireTime)
     assert jwtCodec.isExpired() is True
+
+def test_ifJWTInvalid():
+    fakeJWTStr = '12345'
+    assert JwtCodec.fromJwtStr(fakeJWTStr) is None
