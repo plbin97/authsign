@@ -20,6 +20,7 @@ def startJwtActivityManagerThread():
     running = True
     activeJwtHash = []
     eventLoopThread = Thread(target=_loopInThread, args=())
+    eventLoopThread.setDaemon(True)
     eventLoopThread.start()
 
 
