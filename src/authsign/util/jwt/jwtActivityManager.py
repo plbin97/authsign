@@ -1,18 +1,37 @@
 import asyncio
-import threading
+from threading import Thread
 
-_activeJwtHash = []
-_running = True
+activeJwtHash = []
+running = True
+eventLoop: asyncio.AbstractEventLoop or None = None
+eventLoopThread: Thread or None
 
 
-def stopThread():
+def startJwtActivityManagerThread():
+    """
+    Start the thread
+    :return:
+    """
+    global eventLoop
+    global eventLoopThread
+    global running
+    global activeJwtHash
+    eventLoop = asyncio.get_event_loop()
+    running = True
+    activeJwtHash = []
+    eventLoopThread = Thread(target=_loopInThread, args=())
+    eventLoopThread.start()
+
+
+def stopJwtActivityManagerThread():
     """
     Stop the thread
     For testing
     :return:
     """
-    global _running
-    _running = False
+    global running
+    running = False
+    eventLoopThread.join()
 
 
 async def _emptyCoroutine():
@@ -20,7 +39,7 @@ async def _emptyCoroutine():
     An empty forever running coroutine
     :return:
     """
-    while _running:
+    while running:
         await asyncio.sleep(1)
 
 
@@ -32,27 +51,31 @@ async def _newActiveJwtHashRemover(jwtHash: int, countDown: int):
     :return:
     """
     await asyncio.sleep(countDown)
-    _activeJwtHash.remove(jwtHash)
+    if jwtHash in activeJwtHash:
+        activeJwtHash.remove(jwtHash)
 
 
-def _loopInThread(eventLoop: asyncio.AbstractEventLoop):
+def _loopInThread():
     """
     This method would be run in a thread for start up the event loop
     :param loop:
     :return:
     """
+    global eventLoop
     asyncio.set_event_loop(eventLoop)
-    eventLoop.run_until_complete(_emptyCoroutine())  # This will never completed
+
+    eventLoop.run_until_complete(_emptyCoroutine())
 
 
-def activateJwt(jwtHash: int, expiredInSec: int):
+def activateJwt(jwtHash: int, expiredInSec: int = 7200):
     """
     Activate a Jwt; after 'expiredInSec', the Jwt would be non-active
     :param jwtHash:
     :param expiredInSec:
     :return:
     """
-    _activeJwtHash.append(jwtHash)
+    activeJwtHash.append(jwtHash)
+    asyncio.set_event_loop(eventLoop)
     asyncio.ensure_future(_newActiveJwtHashRemover(jwtHash, expiredInSec))
 
 
@@ -62,9 +85,14 @@ def isJwtActive(jwtHash: int) -> bool:
     :param jwtHash:
     :return:
     """
-    return jwtHash in _activeJwtHash
+    return jwtHash in activeJwtHash
 
 
-_eventLoop: asyncio.AbstractEventLoop = asyncio.get_event_loop()
-_eventLoopThread = threading.Thread(target=_loopInThread, args=(_eventLoop,))
-_eventLoopThread.start()
+def disableJwt(jwtHash: int):
+    """
+    Disable a JWT, make it expired
+    :param jwtHash:
+    :return:
+    """
+    if jwtHash in activeJwtHash:
+        activeJwtHash.remove(jwtHash)

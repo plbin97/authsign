@@ -64,7 +64,7 @@ class JwtCodec:
         now: datetime = datetime.utcnow()
         return self.utcTimeOfExpire < now
 
-    def encodeToJwtStr(self) -> str:
+    def getJwtStr(self) -> str:
         """
         Encode the data into Jwt string
         :return:
@@ -87,4 +87,4 @@ class JwtCodec:
         """
         if self.jwtTemp != '':
             return hash(self.jwtTemp)
-        return hash(self.encodeToJwtStr())
+        return hash(self.getJwtStr())

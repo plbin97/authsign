@@ -1,9 +1,10 @@
 from flask_restx import Resource
-from flask import request, jsonify
-import jwt
+from flask import request
+
 
 from ..databaseModels import User
 from ..util.hashPassword import hashPassword
+from ..util.jwt import createJwtForLogin
 
 
 class UserLoginController(Resource):
@@ -24,7 +25,7 @@ class UserLoginController(Resource):
         user: User = User.query.filter_by(username=username, password=hashedPassword).first()
 
         if user is None:
-            return 'Your username has already been used', 400
+            return 'Username or password incorrect', 400
 
-
-        return
+        jwtStr: str = createJwtForLogin(user.id, user.role)
+        return jwtStr, 200

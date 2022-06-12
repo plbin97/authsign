@@ -2,6 +2,7 @@ from flask import Blueprint, send_from_directory
 from flask_cors import CORS
 from flask_restx import Api
 from flask import Flask
+from .util.jwt import startJwtActivityManagerThread
 from .extension import db, migrate
 
 from .controllers import UserLoginController, UserController, UserLogoutController
@@ -16,6 +17,7 @@ def onRegister(setupState):
     app: Flask = setupState.app
     db.init_app(app)
     migrate.init_app(app, db)
+    startJwtActivityManagerThread()
 
 
 @authsign.route('/authsign')
