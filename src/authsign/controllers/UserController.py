@@ -1,18 +1,26 @@
-from flask_restx import Resource, reqparse
+from flask_restx import Resource
 from flask import request
-import hashlib
+import json
 
 from ..databaseModels import User
 from ..extension import db
 from ..util.hashPassword import hashPassword
-
-parser = reqparse.RequestParser
+from ..util import verifyUserInController
 
 
 class UserController(Resource):
 
     def get(self):
-        return {'hello': 'world'}
+        """
+        For getting the user(self) information
+        :return:
+        """
+        verifyResult = verifyUserInController()
+        if isinstance(verifyResult, tuple):
+            return verifyResult
+        user: User = verifyResult
+        userDict: dict = user.toDict()
+        return json.dumps(userDict), 200
 
     def post(self):
         """
@@ -42,3 +50,12 @@ class UserController(Resource):
         db.session.add(newUser)
         db.session.commit()
         return 'Done', 200
+
+    def put(self):
+        verifyResult = verifyUserInController()
+        if isinstance(verifyResult, tuple):
+            return verifyResult
+        user: User = verifyResult
+        reqData: dict = request.json
+
+        pass

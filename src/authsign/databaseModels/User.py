@@ -12,9 +12,22 @@ class User(db.Model):
     phone = db.Column(db.String(32), nullable=True)
     role = db.Column(db.Integer, nullable=False)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return '<User %r>' % self.username
 
-    def isAdmin(self):
+    def isAdmin(self) -> bool:
+        """
+        Check if user is admin
+        :return:
+        """
         return self.role == 0
 
+    def toDict(self) -> dict:
+        """
+        Translate the object into a dictionary
+        :return:
+        """
+        userDict: dict = self.__dict__
+        del userDict['_sa_instance_state']
+        del userDict['password']
+        return userDict

@@ -1,6 +1,6 @@
 from .JwtCodec import JwtCodec
 from .jwtActivityManager import activateJwt, isJwtActive, disableJwt, stopJwtActivityManagerThread, \
-    startJwtActivityManagerThread
+    startJwtActivityManagerThread, activeJwtHash
 
 
 def createJwtForLogin(userID: int, role: int = 0) -> str:
