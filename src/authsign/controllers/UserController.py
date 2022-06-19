@@ -7,7 +7,6 @@ from ..extension import db
 from ..util.hashPassword import hashPassword
 from ..util import verifyUserInController
 
-
 class UserController(Resource):
 
     def get(self):
@@ -57,5 +56,5 @@ class UserController(Resource):
             return verifyResult
         user: User = verifyResult
         reqData: dict = request.json
-
-        pass
+        user.userUpdateInfo(reqData)
+        return '', 200

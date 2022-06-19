@@ -1,4 +1,5 @@
 from ..extension import db
+from ..util import hashPassword
 
 
 class User(db.Model):
@@ -29,5 +30,16 @@ class User(db.Model):
         """
         userDict: dict = self.__dict__
         del userDict['_sa_instance_state']
-        del userDict['password']
+        userDict['password'] = ''
         return userDict
+
+    def userUpdateInfo(self, mapOfData: dict):
+        for keyInReq in mapOfData:
+            if hasattr(self, keyInReq):
+                if isinstance(mapOfData[keyInReq], type(getattr(self, keyInReq))):
+                    if keyInReq == 'password':
+                        self.password = hashPassword(mapOfData[keyInReq])
+                    else:
+                        setattr(self, keyInReq, mapOfData[keyInReq])
+
+        db.session.commit()
