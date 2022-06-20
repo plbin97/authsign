@@ -28,12 +28,9 @@ jobs:
     - name: Create testing database
       run: |
         flask db upgrade
-    - name: Test with pytest
+    - name: Test and Generate coverage report
       run: |
-        pytest
-    - name: Generate coverage report
-      run: |
-        pytest --cov=./ --cov-report=xml
+        pytest --cov=./src/authsign --cov-report=xml
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v2
       with:
@@ -42,6 +39,6 @@ jobs:
         fail_ci_if_error: true
         files: ./coverage.xml
         flags: backendTest
-        name: codecov-umbrella
+        name: authsignBackend
         path_to_write_report: ./coverage/codecov_report.txt
         verbose: true
