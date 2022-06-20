@@ -1,7 +1,8 @@
 # Authsign
 
-![](https://github.com/plbin97/authsign/actions/workflows/test.yml/badge.svg)
-![](https://github.com/plbin97/authsign/actions/workflows/staging.yml/badge.svg)
+[![](https://github.com/plbin97/authsign/actions/workflows/test.yml/badge.svg)](https://github.com/plbin97/authsign/actions/workflows/test.yml)
+[![](https://github.com/plbin97/authsign/actions/workflows/deploy.yml/badge.svg)](https://github.com/plbin97/authsign/actions/workflows/deploy.yml)
+[![codecov](https://codecov.io/gh/plbin97/authsign/branch/master/graph/badge.svg?token=EBTANVG4WE)](https://codecov.io/gh/plbin97/authsign)
 
 
 This repository is a flask blueprint for user management required by Keith Williams for his IS 218 and IS 690 classes.
