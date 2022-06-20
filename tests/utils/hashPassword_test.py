@@ -1,4 +1,4 @@
-from .hashPassword import hashPassword
+from src.authsign.utils.hashPassword import hashPassword
 
 def test():
     hashed: str = hashPassword('123')

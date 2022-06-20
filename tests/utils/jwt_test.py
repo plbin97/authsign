@@ -1,4 +1,4 @@
-from .jwt import createJwtForLogin, verifyJwt, disableJwtForLogout, stopJwtActivityManagerThread, \
+from src.authsign.utils.jwt import createJwtForLogin, verifyJwt, disableJwtForLogout, stopJwtActivityManagerThread, \
     startJwtActivityManagerThread
 
 

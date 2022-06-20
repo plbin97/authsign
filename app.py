@@ -1,17 +1,10 @@
-from flask import Flask, redirect
-from src.authsign.app import authsign
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
-from src.authsign.extension import db, migrate
+from flask import redirect
+from appFactory import createApp
 
-app = Flask(__name__, static_folder=None)
-app.register_blueprint(authsign)
+app = createApp()
+from src.authsign.databaseModels import User
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db.init_app(app)
-migrate.init_app(app, db)
-from src.authsign.databaseModels import User
-
 
 @app.route('/')
 def index():

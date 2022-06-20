@@ -1,7 +1,7 @@
 import time
 import threading
 
-from .jwtActivityManager import isJwtActive, activateJwt, stopJwtActivityManagerThread, disableJwt, \
+from src.authsign.utils.jwt.jwtActivityManager import isJwtActive, activateJwt, stopJwtActivityManagerThread, disableJwt, \
     startJwtActivityManagerThread
 
 

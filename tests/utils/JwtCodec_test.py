@@ -1,4 +1,4 @@
-from .JwtCodec import JwtCodec
+from src.authsign.utils.jwt.JwtCodec import JwtCodec
 from datetime import date, datetime, timedelta
 
 

@@ -1,11 +1,11 @@
 from flask_restx import Resource
-from flask import request
+from flask import request, make_response, Response
 import json
 
 from ..databaseModels import User
 from ..extension import db
-from ..util.hashPassword import hashPassword
-from ..util import verifyUserInController
+from ..utils.hashPassword import hashPassword
+from .userVerification import userVerification
 
 class UserController(Resource):
 
@@ -14,12 +14,14 @@ class UserController(Resource):
         For getting the user(self) information
         :return:
         """
-        verifyResult = verifyUserInController()
-        if isinstance(verifyResult, tuple):
+        verifyResult: Response or User = userVerification()
+        if isinstance(verifyResult, Response):
             return verifyResult
         user: User = verifyResult
         userDict: dict = user.toDict()
-        return json.dumps(userDict), 200
+        response: Response = make_response(json.dumps(userDict), 200)
+        response.mimetype = 'application/json'
+        return response
 
     def post(self):
         """
@@ -30,28 +32,39 @@ class UserController(Resource):
         """
         reqData: dict = request.json
 
+        response: Response = make_response()
+        response.status_code = 400
+        response.mimetype = 'text/plain'
+
+
         if ('username' not in reqData) or ('password' not in reqData):
-            return 'Lack of parameters', 400
+            response.response = 'Lack of parameters'
+            return response
 
         username: str = reqData['username']
         password: str = reqData['password']
 
         if len(username) > 32:
-            return 'Username is too long', 400
+            response.response = 'Username is too long'
+            return response
         if len(password) > 32:
-            return 'Password is too long', 400
+            response.response = 'Password is too long'
+            return response
         if User.query.filter_by(username=username).first() is not None:
-            return 'Your username has already been used', 400
+            response.response = 'Your username has already been used'
+            return response
 
         passwordHash: str = hashPassword(password)
 
         newUser = User(username=username, password=passwordHash, emailVerified=False, role=1)
         db.session.add(newUser)
         db.session.commit()
-        return 'Done', 200
+        response.status_code = 200
+        response.response = 'Done'
+        return response
 
     def put(self):
-        verifyResult = verifyUserInController()
+        verifyResult = userVerification()
         if isinstance(verifyResult, tuple):
             return verifyResult
         user: User = verifyResult
