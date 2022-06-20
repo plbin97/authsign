@@ -1,6 +1,6 @@
 # Authsign
 
-![](https://github.com/plbin97/authsign/actions/workflows/generalTest.yml/badge.svg)
+![](https://github.com/plbin97/authsign/actions/workflows/test.yml/badge.svg)
 ![](https://github.com/plbin97/authsign/actions/workflows/staging.yml/badge.svg)
 
 
