@@ -4,7 +4,7 @@ from appFactory import createApp
 app = createApp()
 from src.authsign.databaseModels import User
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = None
 
 @app.route('/')
 def index():

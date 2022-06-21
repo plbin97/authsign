@@ -22,6 +22,6 @@ def refreshApp():
         "TESTING": True,
     })
     appInst.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-    appInst.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    appInst.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = None
     return appInst
 

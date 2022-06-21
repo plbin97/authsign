@@ -16,22 +16,22 @@ def createJwtForLogin(userID: int, role: int = 0) -> str:
     return jwtCodec.getJwtStr()
 
 
-def verifyJwt(jwtStr: str) -> (int, int) or (None, None):
+def verifyJwt(jwtStr: str) -> (int, int):
     """
     Verify a Jwt, check if the JWT is valid and unexpired
     :param jwtStr:
     :return:
-    For invalid or expired JWT, return (None, None)
+    For invalid or expired JWT, a LookupError would be raised
     For valid JWT, return (userID, role)
     """
     jwtCodec: JwtCodec = JwtCodec.fromJwtStr(jwtStr)
     if jwtCodec is None:
-        return None, None
+        raise LookupError
     if jwtCodec.isExpired():
-        return None, None
+        raise LookupError
 
     if not isJwtActive(hash(jwtStr)):
-        return None, None
+        raise LookupError
 
     return jwtCodec.userID, jwtCodec.role
 
