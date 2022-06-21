@@ -9,7 +9,6 @@ from ..extension import api
 from .swaggerModels import loginSignupModel, userModel
 
 
-
 class UserController(Resource):
 
     @api.doc(security='apikey')

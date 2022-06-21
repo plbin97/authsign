@@ -1,6 +1,5 @@
 from flask import Blueprint, send_from_directory
 from flask_cors import CORS
-from flask_restx import Api
 from flask import Flask
 from .utils.jwt import startJwtActivityManagerThread
 from .extension import db, migrate, api
@@ -27,6 +26,9 @@ def onRegister(setupState):
         }
     }
     api.authorizations = authorizations
+    api.title = 'Authsign API'
+    api.description = 'A user management blueprint'
+    api.version = '1.0'
 
 
 @authsign.route('/authsign')
