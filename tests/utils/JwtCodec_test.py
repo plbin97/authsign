@@ -18,6 +18,11 @@ def test_ifWorking():
     assert jwtCodec1.userID == jwtCodec2.userID
     assert jwtCodec1.isExpired() is False
 
+def test_duplicateJwt():
+    userID = 123
+    jwtCodec1 = JwtCodec.newJwt(userID=userID)
+    jwtCodec2 = JwtCodec.newJwt(userID=userID)
+    assert jwtCodec1.getJwtStr() != jwtCodec2.getJwtStr()
 
 def test_ifExpired():
     userID = 123

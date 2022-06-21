@@ -1,3 +1,5 @@
+import pytest
+
 from src.authsign.utils.jwt import createJwtForLogin, verifyJwt, disableJwtForLogout, stopJwtActivityManagerThread, \
     startJwtActivityManagerThread
 
@@ -11,7 +13,6 @@ def test():
     assert userID == testUserID
     assert role == 0
     disableJwtForLogout(jwt)
-    currentUserID, currentRole = verifyJwt(jwt)
-    assert currentRole is None
-    assert currentUserID is None
+    with pytest.raises(LookupError):
+        verifyJwt(jwt)
     stopJwtActivityManagerThread()

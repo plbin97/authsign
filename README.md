@@ -7,26 +7,47 @@
 
 This repository is a flask blueprint for user management required by Keith Williams for his IS 218 and IS 690 classes.
 
-Keith Williams is a good professor; If you can understand everything in this repository, you will get an "A."
 
 ### API documentation
 
-API documentation are managed by swagger
-[Click me](https://plbin97.github.io/authsign/)
+[https://authsign.teenet.me](https://authsign.teenet.me)
 
-### Stage server
+### Try out
 
 [https://authsign.teenet.me/authsign](https://authsign.teenet.me/authsign)
 
-### Run the this app by Docker
+### Deploy by Docker
 
-Run docker from Docker hub
+from Docker hub
 ```shell
-docker pull plbin97/authsign:master && docker run -d plbin97/authsign
+docker pull plbin97/authsign:master && docker run -d plbin97/authsign -p 8088:8088
 ```
 
 Or, you can build docker by yourself
 ```shell
-docker build -t authsign . && docker run -d authsign
+docker build -t authsign . && docker run -d authsign -p 8088:8088
 ```
 
+Your docker would be running on port 8088
+
+### Run this app locally
+
+Prerequisite: ```python 3.8+```
+
+Install dependency
+
+```shell
+pip3 install -r requirements.txt
+```
+
+Do database migration
+
+```shell
+flask db upgrade
+```
+
+Run the app
+
+```shell
+flask run
+```

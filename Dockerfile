@@ -20,6 +20,4 @@ RUN pip3 install -r requirements.txt
 
 RUN flask db upgrade
 
-ENTRYPOINT [ "python3" ]
-
-CMD [ "app.py" ]
+RUN flask run --port=8088

@@ -1,12 +1,14 @@
 from datetime import datetime, timedelta
 import jwt
 from .jwtSecret import jwtSecret
+from random import randrange
 
 
 class JwtCodec:
     userID: int
     utcTimeOfIssue: datetime
     utcTimeOfExpire: datetime
+    jwtID: int
     role: int
     jwtTemp: str = ''
 
@@ -16,11 +18,13 @@ class JwtCodec:
             utcTimeOfIssue: datetime,
             utcTimeOfExpire: datetime,
             role: int,
+            jwtID: int
     ):
         self.userID = userID
         self.utcTimeOfIssue = utcTimeOfIssue
         self.utcTimeOfExpire = utcTimeOfExpire
         self.role = role
+        self.jwtID = jwtID
 
     @classmethod
     def fromJwtStr(cls, jwtEncodedStr: str):
@@ -38,7 +42,8 @@ class JwtCodec:
         utcTimeOfIssue = datetime.strptime(jwtPayload['utcTimeOfIssue'], '%c')
         utcTimeOfExpire = datetime.strptime(jwtPayload['utcTimeOfExpire'], '%c')
         role = jwtPayload['role']
-        return cls(userID=userID, utcTimeOfIssue=utcTimeOfIssue, utcTimeOfExpire=utcTimeOfExpire, role=role)
+        jwtID = jwtPayload['jwtID']
+        return cls(userID=userID, utcTimeOfIssue=utcTimeOfIssue, utcTimeOfExpire=utcTimeOfExpire, role=role, jwtID=jwtID)
 
     @classmethod
     def newJwt(
@@ -53,6 +58,7 @@ class JwtCodec:
             utcTimeOfIssue=utcTimeOfIssue,
             utcTimeOfExpire=utcTimeOfExpire,
             role=role,
+            jwtID=randrange(0, 999999)
         )
 
     def isExpired(self) -> bool:
@@ -75,7 +81,8 @@ class JwtCodec:
             'utcTimeOfIssue': self.utcTimeOfIssue.strftime('%c'),
             'utcTimeOfExpire': self.utcTimeOfExpire.strftime('%c'),
             'userID': self.userID,
-            'role': self.role
+            'role': self.role,
+            'jwtID': self.jwtID
         }
         self.jwtTemp = jwt.encode(jwtPayload, jwtSecret, 'HS256')
         return self.jwtTemp
