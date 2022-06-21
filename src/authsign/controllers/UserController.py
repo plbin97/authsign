@@ -6,15 +6,20 @@ from ..databaseModels import User
 from .userVerification import userVerification
 from ..utils.jwt import createJwtForLogin
 from ..extension import api
+from .swaggerModels import loginSignupModel, userModel
+
 
 
 class UserController(Resource):
 
     @api.doc(security='apikey')
+    @api.response(200, 'Success', userModel)
+    @api.response(401, 'Unauthorized')
+    @api.produces(['application/json'])
     def get(self):
         """
         For getting the user(self) information
-        :return:
+        Get the self user's model, but the password field would be empty
         """
         try:
             user = userVerification()
@@ -26,12 +31,15 @@ class UserController(Resource):
         response.mimetype = 'application/json'
         return response
 
+    @api.expect(loginSignupModel)
+    @api.response(200, 'Api Token')
+    @api.response(400, 'Value Error')
+    @api.produces(['text/plain'])
     def post(self):
         """
         For sign up
-        Handle the json body with two parameters: username and password
-        for more detail: https://plbin97.github.io/authsign/#operations-user-post_user
-        :return:
+        Passing a new username and password
+        A new token would be generated if successfully sign up.
         """
         reqData: dict = request.json
 
@@ -58,10 +66,13 @@ class UserController(Resource):
         return response
 
     @api.doc(security='apikey')
+    @api.expect(userModel)
+    @api.produces(['text/plain'])
     def put(self):
         """
         For update user's profile
-        :return:
+        Passing the fields you are going to update with values
+        However, update of ID, emailVerified, and role would not work.
         """
         reqData: dict = request.json
         response: Response = make_response()

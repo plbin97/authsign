@@ -3,14 +3,19 @@ from flask import request, make_response, Response
 
 from ..databaseModels import User
 from ..utils.jwt import createJwtForLogin
+from ..extension import api
+from .swaggerModels import loginSignupModel
 
 
 class UserLoginController(Resource):
+    @api.expect(loginSignupModel)
+    @api.response(200, 'Api Token')
+    @api.response(400, 'Username or password wrong')
+    @api.produces(['text/plain'])
     def post(self):
         """
         For user login
-        Handle the username and password, then return the api token.
-        :return:
+        Passing the username and password, then response the api token.
         """
         reqData: dict = request.json
 

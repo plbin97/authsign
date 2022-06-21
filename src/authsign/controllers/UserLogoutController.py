@@ -7,10 +7,13 @@ from ..extension import api
 class UserLogoutController(Resource):
 
     @api.doc(security='apikey')
+    @api.response(200, 'Success')
+    @api.response(400, 'Missing header')
+    @api.produces(['text/plain'])
     def get(self):
         """
         For log out
-        :return:
+        Disable the api token in the header
         """
         response: Response = make_response()
         response.mimetype = 'text/plain'
