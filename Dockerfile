@@ -20,4 +20,4 @@ RUN pip3 install -r requirements.txt
 
 RUN flask db upgrade
 
-CMD flask run --port=8088
+CMD gunicorn -w 4 --bind 0.0.0.0:8088 'app:app'
