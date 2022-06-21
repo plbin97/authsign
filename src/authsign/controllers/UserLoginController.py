@@ -8,7 +8,7 @@ from ..utils.jwt import createJwtForLogin
 class UserLoginController(Resource):
     def post(self):
         """
-        Controller for user login
+        For user login
         Handle the username and password, then return the api token.
         :return:
         """
@@ -31,7 +31,12 @@ class UserLoginController(Resource):
             response.data = err.args[0]
             return response
 
-        jwtStr: str = createJwtForLogin(user.id, user.role)
-        response.data = jwtStr
         response.status_code = 200
+        if 'expiredAfterSec' in reqData:
+            expiredAfterSec = reqData['expiredAfterSec']
+            if isinstance(expiredAfterSec, int):
+                response.data = createJwtForLogin(user.id, user.role, expiredAfterSec)
+                return response
+
+        response.data = createJwtForLogin(user.id, user.role)
         return response

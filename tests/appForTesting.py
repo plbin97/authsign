@@ -1,15 +1,15 @@
-from appFactory import createApp
+from app import app, createApp
 
-appInst = None
+appInst = app
+
 
 def getApp():
     """
     Get app
     :return:
     """
-    if appInst is None:
-        refreshApp()
     return appInst
+
 
 def refreshApp():
     """
@@ -25,3 +25,5 @@ def refreshApp():
     appInst.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = None
     return appInst
 
+
+refreshApp()

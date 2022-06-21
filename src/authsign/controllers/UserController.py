@@ -5,10 +5,12 @@ import json
 from ..databaseModels import User
 from .userVerification import userVerification
 from ..utils.jwt import createJwtForLogin
+from ..extension import api
 
 
 class UserController(Resource):
 
+    @api.doc(security='apikey')
     def get(self):
         """
         For getting the user(self) information
@@ -55,11 +57,25 @@ class UserController(Resource):
         response.data = jwtStr
         return response
 
+    @api.doc(security='apikey')
     def put(self):
-        verifyResult = userVerification()
-        if isinstance(verifyResult, tuple):
-            return verifyResult
-        user: User = verifyResult
+        """
+        For update user's profile
+        :return:
+        """
         reqData: dict = request.json
-        user.userUpdateInfo(reqData)
-        return '', 200
+        response: Response = make_response()
+        response.mimetype = 'text/plain'
+        try:
+            user = userVerification()
+        except PermissionError as err:
+            return err.args[0]
+        try:
+            user.updateUserByDataMap(reqData)
+        except ValueError as err:
+            response.status_code = 400
+            response.data = err.args[0]
+            return response
+        response.status_code = 200
+        response.data = 'Done'
+        return response
