@@ -14,7 +14,7 @@ class UserLoginController(Resource):
     @api.produces(['text/plain'])
     def post(self):
         """
-        For user login
+        For user signin
         Passing the username and password, then response the api token.
         """
         reqData: dict = request.json
