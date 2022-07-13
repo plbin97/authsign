@@ -1,5 +1,9 @@
+version: "3.9"
 services:
-  web:
+  webapp:
     build: .
     ports:
-      - "8088:8088"
+      - target: 8088
+        published: 8088
+        protocol: tcp
+        mode: host
