@@ -1,10 +1,8 @@
 pipeline {
-    agent { dockerfile true }
+    agent any
     stages {
         stage('Deploy') {
-            steps {
-                sh 'pytest'
-            }
+            { dockerfile true }
         }
     }
 }
