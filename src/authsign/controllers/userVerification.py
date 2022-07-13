@@ -15,7 +15,7 @@ def userVerification() -> User:
     """
     response: Response = make_response()
     response.status_code = 401
-    response.data = 'Login expired'
+    response.data = 'Signin expired'
     if 'X-Api-Key' not in request.headers:
         raise PermissionError(response)
     userToken: str = request.headers['X-Api-Key']

@@ -5,7 +5,7 @@ from .jwtActivityManager import activateJwt, isJwtActive, disableJwt, stopJwtAct
 
 def createJwtForLogin(userID: int, role: int = 0, timeBeforeExpiredInSec: int = 7200) -> str:
     """
-    Create a Jwt for login.
+    Create a Jwt for signin.
     This jwt would be active for 2 hours
     Also, you could create a short live jwt by passing arg of timeBeforeExpiredInSec
     :param timeBeforeExpiredInSec: For testing only

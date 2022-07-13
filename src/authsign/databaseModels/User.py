@@ -106,11 +106,11 @@ class User(db.Model):
     @classmethod
     def getUserByLogin(cls, userName: str, password: str):
         """
-        For login
+        For signin
         :param userName:
         :param password:
         :return:
-        User if login successful
+        User if signin successful
         """
         if len(userName) > 32:
             raise ValueError('Username is too long')

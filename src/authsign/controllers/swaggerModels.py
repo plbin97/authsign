@@ -2,7 +2,7 @@ from flask_restx import fields
 
 from ..extension import api
 
-loginSignupModel = api.model('Login Signup Parameters', {
+loginSignupModel = api.model('Signin Signup.tsx Parameters', {
     'username': fields.String,
     'password': fields.String
 })
