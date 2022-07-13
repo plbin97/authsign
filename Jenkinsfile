@@ -1,8 +1,3 @@
 pipeline {
-    agent any
-    stages {
-        stage('Deploy') {
-            { dockerfile true }
-        }
-    }
+    agent { dockerfile true }
 }
