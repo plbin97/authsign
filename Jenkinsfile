@@ -1,7 +1,7 @@
 pipeline {
     agent { dockerfile true }
     stages {
-        stage('Test') {
+        stage('Deploy') {
             steps {
                 sh ''
             }
