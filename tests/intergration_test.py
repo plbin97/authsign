@@ -2,7 +2,7 @@ import time
 
 from werkzeug.test import TestResponse
 from src.authsign.databaseModels import User
-from src.authsign.utils.jwt import stopJwtActivityManagerThread
+from src.authsign.utils.jwt import stop_jwt_activity_manager_thread
 
 
 def getLoginData(expiredInSec=0):
@@ -30,7 +30,7 @@ responseAPITokenFromLogin = ''
 
 def test_integrationTestInit(newApp):
     with newApp.app_context():
-        User.deleteUser(userName=getLoginData()['username'])
+        User.delete_user(user_name=getLoginData()['username'])
 
 
 def test_signUp(client):
@@ -69,10 +69,10 @@ def test_getUserInfo(client):
         responseBody: dict = response.json
         assert 'id' in responseBody
         assert 'username' in responseBody
-        assert 'firstName' in responseBody
-        assert 'lastName' in responseBody
+        assert 'first_name' in responseBody
+        assert 'last_name' in responseBody
         assert 'email' in responseBody
-        assert 'emailVerified' in responseBody
+        assert 'email_verified' in responseBody
         assert 'password' in responseBody
         assert 'phone' in responseBody
         assert 'role' in responseBody
@@ -86,8 +86,8 @@ def test_getUserInfo(client):
 
 def test_editUserInfo(client):
     updateData = {
-        'firstName': 'Linbin',
-        'lastName': 'Pang'
+        'first_name': 'Linbin',
+        'last_name': 'Pang'
     }
     errorUpdateData = {
         'username': getLoginData()['username']
@@ -98,8 +98,8 @@ def test_editUserInfo(client):
 
     response: TestResponse = client.get('/authsign/user', headers=getAuthHeader(responseAPITokenFromLogin))
     responseBody = response.json
-    assert responseBody['firstName'] == updateData['firstName']
-    assert responseBody['lastName'] == updateData['lastName']
+    assert responseBody['first_name'] == updateData['first_name']
+    assert responseBody['last_name'] == updateData['last_name']
 
     response: TestResponse = client.put('/authsign/user', json=errorUpdateData,
                                         headers=getAuthHeader(responseAPITokenFromLogin))
@@ -144,5 +144,5 @@ def test_timeoutTest(client):
 
 def test_integrationTestEnd(app):
     with app.app_context():
-        User.deleteUser(userName=getLoginData()['username'])
-        stopJwtActivityManagerThread()
+        User.delete_user(user_name=getLoginData()['username'])
+        stop_jwt_activity_manager_thread()

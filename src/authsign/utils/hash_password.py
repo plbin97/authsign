@@ -1,7 +1,8 @@
+"""Module for hash the password"""
 import hashlib
 
 
-def hashPassword(password: str) -> str:
+def hash_password(password: str) -> str:
     """
     Hash the password into a string with length of 32
     :param password:

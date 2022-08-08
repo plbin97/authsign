@@ -1,6 +1,6 @@
 import { APIRequest } from './api'
-import {FetchMock} from "jest-fetch-mock";
-const fetchMock = fetch as FetchMock;
+import { FetchMock } from 'jest-fetch-mock'
+const fetchMock = fetch as FetchMock
 
 describe('testing api', () => {
   beforeEach(() => {
@@ -11,12 +11,12 @@ describe('testing api', () => {
   })
 
   it('calls google and returns data to me', async () => {
-    //assert on the response
+    // assert on the response
     const res = await APIRequest('google')
     console.log(res)
     expect(res.data).toEqual('12345')
 
-    //assert on the times called and arguments given to fetch
+    // assert on the times called and arguments given to fetch
     expect(fetchMock.mock.calls.length).toEqual(1)
     expect(fetchMock.mock.calls[0][0]).toEqual('https://google.com')
   })

@@ -1,22 +1,31 @@
-from flask import Blueprint, send_from_directory
+"""Flask start up file"""
+from flask import Blueprint, send_from_directory, Flask
 from flask_cors import CORS
-from flask import Flask
-from .utils.jwt import startJwtActivityManagerThread
+from .utils.jwt import start_jwt_activity_manager_thread
 from .extension import db, migrate, api
 
 from .controllers import UserLoginController, UserController, UserLogoutController
 
-authsign: Blueprint = Blueprint('authsign', __name__, static_folder='client/build', static_url_path='/authsign')
+authsign: Blueprint = Blueprint(
+    'authsign', __name__,
+    static_folder='client/build',
+    static_url_path='/authsign'
+)
 cors = CORS(authsign)
 
 
 @authsign.record
-def onRegister(setupState):
-    app: Flask = setupState.app
+def on_register(setup_state):
+    """
+    Hooker on registered
+    :param setup_state:
+    :return:
+    """
+    app: Flask = setup_state.app
     db.init_app(app)
     migrate.init_app(app, db)
     api.init_app(app)
-    startJwtActivityManagerThread()
+    start_jwt_activity_manager_thread()
 
     authorizations = {
         'apikey': {
@@ -33,19 +42,29 @@ def onRegister(setupState):
 
 @authsign.route('/authsign')
 def client():
+    """
+    Client route
+    :return:
+    """
     return send_from_directory(authsign.static_folder, 'index.html')
 
 
 @api.route('/authsign/user')
 class UC(UserController):
-    pass
+    """
+    User controller route
+    """
 
 
 @api.route('/authsign/userlogin')
 class ULIC(UserLoginController):
-    pass
+    """
+    User login route
+    """
 
 
 @api.route('/authsign/userlogout')
 class ULOC(UserLogoutController):
-    pass
+    """
+    user logout route
+    """

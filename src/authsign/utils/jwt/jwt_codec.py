@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 import jwt
-from .jwtSecret import jwtSecret
+from .jwt_secret import jwtSecret
 from random import randrange
 
 
@@ -38,7 +38,7 @@ class JwtCodec:
         except:
             return None
 
-        userID = jwtPayload['userID']
+        userID = jwtPayload['user_id']
         utcTimeOfIssue = datetime.strptime(jwtPayload['utcTimeOfIssue'], '%c')
         utcTimeOfExpire = datetime.strptime(jwtPayload['utcTimeOfExpire'], '%c')
         role = jwtPayload['role']
@@ -80,7 +80,7 @@ class JwtCodec:
         jwtPayload: dict = {
             'utcTimeOfIssue': self.utcTimeOfIssue.strftime('%c'),
             'utcTimeOfExpire': self.utcTimeOfExpire.strftime('%c'),
-            'userID': self.userID,
+            'user_id': self.userID,
             'role': self.role,
             'jwtID': self.jwtID
         }

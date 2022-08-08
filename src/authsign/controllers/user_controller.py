@@ -1,18 +1,21 @@
+"""Controller for operation on user"""
+import json
 from flask_restx import Resource
 from flask import request, make_response, Response
-import json
-
 from ..databaseModels import User
-from .userVerification import userVerification
-from ..utils.jwt import createJwtForLogin
+from .user_verification import user_verification
+from ..utils.jwt import create_jwt_for_login
 from ..extension import api
-from .swaggerModels import loginSignupModel, userModel
+from .swagger_models import login_signup_model, user_model
 
 
 class UserController(Resource):
+    """
+    Controller static class
+    """
 
     @api.doc(security='apikey')
-    @api.response(200, 'Success', userModel)
+    @api.response(200, 'Success', user_model)
     @api.response(401, 'Unauthorized')
     @api.produces(['application/json'])
     def get(self):
@@ -21,16 +24,16 @@ class UserController(Resource):
         Get the self user's model, but the password field would be empty
         """
         try:
-            user = userVerification()
+            user = user_verification()
         except PermissionError as err:
             return err.args[0]
 
-        userDict: dict = user.toDict()
-        response: Response = make_response(json.dumps(userDict), 200)
+        user_dict: dict = user.to_dict()
+        response: Response = make_response(json.dumps(user_dict), 200)
         response.mimetype = 'application/json'
         return response
 
-    @api.expect(loginSignupModel)
+    @api.expect(login_signup_model)
     @api.response(200, 'Api Token')
     @api.response(400, 'Value Error')
     @api.produces(['text/plain'])
@@ -40,48 +43,48 @@ class UserController(Resource):
         Passing a new username and password
         A new token would be generated if successfully sign up.
         """
-        reqData: dict = request.json
+        req_data: dict = request.json
 
         response: Response = make_response()
         response.status_code = 400
         response.mimetype = 'text/plain'
 
-        if ('username' not in reqData) or ('password' not in reqData):
+        if ('username' not in req_data) or ('password' not in req_data):
             response.data = 'Lack of parameters'
             return response
 
-        username: str = reqData['username']
-        password: str = reqData['password']
+        username: str = req_data['username']
+        password: str = req_data['password']
 
         try:
-            user: User = User.newUser(userName=username, password=password)
+            user: User = User.new_user(user_name=username, password=password)
         except ValueError as err:
             response.data = err.args[0]
             return response
 
-        jwtStr: str = createJwtForLogin(user.id, user.role)
+        jwt_str: str = create_jwt_for_login(user.id, user.role)
         response.status_code = 200
-        response.data = jwtStr
+        response.data = jwt_str
         return response
 
     @api.doc(security='apikey')
-    @api.expect(userModel)
+    @api.expect(user_model)
     @api.produces(['text/plain'])
     def put(self):
         """
         For update user's profile
         Passing the fields you are going to update with values
-        However, update of ID, emailVerified, and role would not work.
+        However, update of ID, email_verified, and role would not work.
         """
-        reqData: dict = request.json
+        req_data: dict = request.json
         response: Response = make_response()
         response.mimetype = 'text/plain'
         try:
-            user = userVerification()
+            user = user_verification()
         except PermissionError as err:
             return err.args[0]
         try:
-            user.updateUserByDataMap(reqData)
+            user.update_user_by_data_map(req_data)
         except ValueError as err:
             response.status_code = 400
             response.data = err.args[0]

@@ -1,5 +1,5 @@
 from werkzeug.test import TestResponse
-from src.authsign.utils.jwt import stopJwtActivityManagerThread
+from src.authsign.utils.jwt import stop_jwt_activity_manager_thread
 
 def test_init(newApp):
     pass
@@ -14,4 +14,4 @@ def test_signUp(client):
 
 def test_end(app):
     with app.app_context():
-        stopJwtActivityManagerThread()
+        stop_jwt_activity_manager_thread()

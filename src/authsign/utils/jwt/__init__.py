@@ -1,49 +1,55 @@
-from .JwtCodec import JwtCodec
-from .jwtActivityManager import activateJwt, isJwtActive, disableJwt, stopJwtActivityManagerThread, \
-    startJwtActivityManagerThread, activeJwtHash
+"""Module for JWT management"""
+from .jwt_codec import JwtCodec
+from .jwt_activity_manager import \
+    activate_jwt, \
+    is_jwt_active, \
+    disable_jwt, \
+    stop_jwt_activity_manager_thread, \
+    start_jwt_activity_manager_thread, \
+    ACTIVE_JWT_HASH
 
 
-def createJwtForLogin(userID: int, role: int = 0, timeBeforeExpiredInSec: int = 7200) -> str:
+def create_jwt_for_login(user_id: int, role: int = 0, time_before_expired_in_sec: int = 7200) -> str:
     """
     Create a Jwt for signin.
     This jwt would be active for 2 hours
     Also, you could create a short live jwt by passing arg of timeBeforeExpiredInSec
-    :param timeBeforeExpiredInSec: For testing only
-    :param userID:
+    :param time_before_expired_in_sec: For testing only
+    :param user_id:
     :param role:
     :return: jwt
     """
-    jwtCodec: JwtCodec = JwtCodec.newJwt(userID=userID, role=role)
-    activateJwt(jwtCodec.getJwtHash(), timeBeforeExpiredInSec)
-    return jwtCodec.getJwtStr()
+    jwt_codec: JwtCodec = JwtCodec.newJwt(userID=user_id, role=role)
+    activate_jwt(jwt_codec.getJwtHash(), time_before_expired_in_sec)
+    return jwt_codec.getJwtStr()
 
 
 
 
-def verifyJwt(jwtStr: str) -> (int, int):
+def verify_jwt(jwt_str: str) -> (int, int):
     """
     Verify a Jwt, check if the JWT is valid and unexpired
-    :param jwtStr:
+    :param jwt_str:
     :return:
     For invalid or expired JWT, a LookupError would be raised
-    For valid JWT, return (userID, role)
+    For valid JWT, return (user_id, role)
     """
-    jwtCodec: JwtCodec = JwtCodec.fromJwtStr(jwtStr)
-    if jwtCodec is None:
+    jwt_codec: JwtCodec = JwtCodec.fromJwtStr(jwt_str)
+    if jwt_codec is None:
         raise LookupError
-    if jwtCodec.isExpired():
-        raise LookupError
-
-    if not isJwtActive(hash(jwtStr)):
+    if jwt_codec.isExpired():
         raise LookupError
 
-    return jwtCodec.userID, jwtCodec.role
+    if not is_jwt_active(hash(jwt_str)):
+        raise LookupError
+
+    return jwt_codec.userID, jwt_codec.role
 
 
-def disableJwtForLogout(jwtStr: str):
+def disable_jwt_for_logout(jwt_str: str):
     """
     Disable a JWT for logout
-    :param jwtStr:
+    :param jwt_str:
     :return:
     """
-    disableJwt(hash(jwtStr))
+    disable_jwt(hash(jwt_str))

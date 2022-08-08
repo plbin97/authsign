@@ -1,10 +1,15 @@
+"""Module for logout"""
 from flask_restx import Resource
 from flask import request, make_response, Response
-from ..utils.jwt import disableJwtForLogout
+
+from ..utils.jwt import disable_jwt_for_logout
 from ..extension import api
 
 
 class UserLogoutController(Resource):
+    """
+    Controller for user logout
+    """
 
     @api.doc(security='apikey')
     @api.response(200, 'Success')
@@ -23,5 +28,5 @@ class UserLogoutController(Resource):
             return response
         response.data = 'Done'
         response.status_code = 200
-        disableJwtForLogout(request.headers['X-Api-Key'])
+        disable_jwt_for_logout(request.headers['X-Api-Key'])
         return response

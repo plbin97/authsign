@@ -1,7 +1,7 @@
 import pytest
 
-from src.authsign.databaseModels.User import User
-from src.authsign.utils.jwt import stopJwtActivityManagerThread
+from src.authsign.databaseModels.user import User
+from src.authsign.utils.jwt import stop_jwt_activity_manager_thread
 
 testUsername: str = 'panglinbin'
 testAnotherUsername: str = 'linbinpang'
@@ -10,65 +10,65 @@ testPassword: str = 'thisismypassword'
 
 def test_init(newApp):
     with newApp.app_context():
-        User.deleteUser(userName=testUsername)
-        User.deleteUser(userName=testAnotherUsername)
+        User.delete_user(user_name=testUsername)
+        User.delete_user(user_name=testAnotherUsername)
 
 
 def test_newUser(app):
     with app.app_context():
-        testUser = User.newUser(userName=testUsername, password=testPassword)
+        testUser = User.new_user(user_name=testUsername, password=testPassword)
         assert isinstance(testUser, User)
 
         with pytest.raises(ValueError, match='.*?been used.*?'):
-            User.newUser(userName=testUsername, password=testPassword)
+            User.new_user(user_name=testUsername, password=testPassword)
 
         with pytest.raises(ValueError, match='.*?too short.*?'):
-            User.newUser(userName='otherUsernameTest', password='123')
+            User.new_user(user_name='otherUsernameTest', password='123')
 
         with pytest.raises(ValueError, match='.*?too short.*?'):
-            User.newUser(userName='123', password=testPassword)
+            User.new_user(user_name='123', password=testPassword)
 
         with pytest.raises(ValueError, match='.*?too long.*?'):
-            User.newUser(userName='123' * 100, password=testPassword)
+            User.new_user(user_name='123' * 100, password=testPassword)
 
         with pytest.raises(ValueError, match='.*?too long.*?'):
-            User.newUser(userName='otherUsernameTest', password='123' * 100)
+            User.new_user(user_name='otherUsernameTest', password='123' * 100)
 
 
 def test_loginUser(app):
     with app.app_context():
-        testUser = User.getUserByLogin(userName=testUsername, password=testPassword)
+        testUser = User.get_user_by_login(user_name=testUsername, password=testPassword)
         assert isinstance(testUser, User)
         with pytest.raises(ValueError, match='.*?incorrect.*?'):
-            User.getUserByLogin(userName='123', password=testPassword)
+            User.get_user_by_login(user_name='123', password=testPassword)
         with pytest.raises(ValueError, match='.*?incorrect.*?'):
-            User.getUserByLogin(userName=testUsername, password='123')
+            User.get_user_by_login(user_name=testUsername, password='123')
         with pytest.raises(ValueError, match='.*?too long.*?'):
-            User.getUserByLogin(userName=testUsername, password='123' * 100)
+            User.get_user_by_login(user_name=testUsername, password='123' * 100)
         with pytest.raises(ValueError, match='.*?too long.*?'):
-            User.getUserByLogin(userName='123' * 100, password=testPassword)
+            User.get_user_by_login(user_name='123' * 100, password=testPassword)
 
 
 def test_updateUser(app):
     with app.app_context():
-        testUser = User.getUserByLogin(userName=testUsername, password=testPassword)
-        assert testUser.firstName is None
-        assert testUser.lastName is None
+        testUser = User.get_user_by_login(user_name=testUsername, password=testPassword)
+        assert testUser.first_name is None
+        assert testUser.last_name is None
         assert testUser.email is None
         assert testUser.phone is None
 
         # Update user's profile
         dataMap = {
-            'firstName': 'Linbin',
-            'lastName': 'Pang',
+            'first_name': 'Linbin',
+            'last_name': 'Pang',
             'email': 'i@teenet.me',
             'phone': '1231231223'
         }
-        testUser.updateUserByDataMap(dataMap)
+        testUser.update_user_by_data_map(dataMap)
 
-        testUser = User.getUserByLogin(userName=testUsername, password=testPassword)
-        assert testUser.firstName == dataMap['firstName']
-        assert testUser.lastName == dataMap['lastName']
+        testUser = User.get_user_by_login(user_name=testUsername, password=testPassword)
+        assert testUser.first_name == dataMap['first_name']
+        assert testUser.last_name == dataMap['last_name']
         assert testUser.email == dataMap['email']
         assert testUser.phone == dataMap['phone']
 
@@ -78,32 +78,32 @@ def test_updateUser(app):
             'password': 'newpassword'
         }
         alteredPassword = dataMap['password']
-        testUser.updateUserByDataMap(dataMap)
+        testUser.update_user_by_data_map(dataMap)
         with pytest.raises(ValueError, match='.*?incorrect.*?'):
-            User.getUserByLogin(userName=testUsername, password=testPassword)
+            User.get_user_by_login(user_name=testUsername, password=testPassword)
 
         dataMap = {
             'password': 'newpa'
         }
         with pytest.raises(ValueError, match='.*?too short.*?'):
-            testUser.updateUserByDataMap(dataMap)
+            testUser.update_user_by_data_map(dataMap)
 
         dataMap = {
             'password': 'newpa' * 100
         }
         with pytest.raises(ValueError, match='.*?too long.*?'):
-            testUser.updateUserByDataMap(dataMap)
+            testUser.update_user_by_data_map(dataMap)
 
         # update user's name
         dataMap = {
             'username': testAnotherUsername
         }
         alteredUsername = dataMap['username']
-        testUser.updateUserByDataMap(dataMap)
+        testUser.update_user_by_data_map(dataMap)
         with pytest.raises(ValueError, match='.*?already been used.*?'):
-            testUser.updateUserByDataMap(dataMap)
+            testUser.update_user_by_data_map(dataMap)
 
-        testUser = User.getUserByLogin(userName=alteredUsername, password=alteredPassword)
+        testUser = User.get_user_by_login(user_name=alteredUsername, password=alteredPassword)
         assert isinstance(testUser, User)
 
 
@@ -111,6 +111,6 @@ def test_updateUser(app):
 
 def test_end(app):
     with app.app_context():
-        User.deleteUser(userName=testUsername)
-        User.deleteUser(userName=testAnotherUsername)
-        stopJwtActivityManagerThread()
+        User.delete_user(user_name=testUsername)
+        User.delete_user(user_name=testAnotherUsername)
+        stop_jwt_activity_manager_thread()

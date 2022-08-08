@@ -1,1 +1,2 @@
-from .hashPassword import hashPassword
+"""Utils"""
+from .hash_password import hash_password

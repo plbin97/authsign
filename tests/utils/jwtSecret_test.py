@@ -1,4 +1,4 @@
-from src.authsign.utils.jwt.jwtSecret import jwtSecret
+from src.authsign.utils.jwt.jwt_secret import jwtSecret
 
 
 def test():

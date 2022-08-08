@@ -1,4 +1,4 @@
-from app import app, createApp
+from app import app, create_app
 
 appInst = app
 
@@ -17,7 +17,7 @@ def refreshApp():
     :return:
     """
     global appInst
-    appInst = createApp()
+    appInst = create_app()
     appInst.config.update({
         "TESTING": True,
     })

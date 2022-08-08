@@ -1,3 +1,4 @@
-from appFactory import createApp
+"""Entry"""
+from app_factory import create_app
 
-app = createApp()
+app = create_app()

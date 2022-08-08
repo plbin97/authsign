@@ -1,10 +1,11 @@
+"""Helper module for user verification"""
 from flask import request, Response, make_response
 
-from src.authsign.databaseModels import User
-from src.authsign.utils.jwt import verifyJwt
+from ..databaseModels import User
+from ..utils.jwt import verify_jwt
 
 
-def userVerification() -> User:
+def user_verification() -> User:
     """
     This is a helper function for controller;
     it read token from request header for verifying user's identity
@@ -18,14 +19,14 @@ def userVerification() -> User:
     response.data = 'Signin expired'
     if 'X-Api-Key' not in request.headers:
         raise PermissionError(response)
-    userToken: str = request.headers['X-Api-Key']
+    user_token: str = request.headers['X-Api-Key']
     try:
-        userID, role = verifyJwt(userToken)
-    except LookupError:
+        user_id, = verify_jwt(user_token)
+    except LookupError as exc:
+        raise PermissionError(response) from exc
+    if user_id is None:
         raise PermissionError(response)
-    if userID is None:
-        raise PermissionError(response)
-    user: User = User.query.filter_by(id=userID).first()
+    user: User = User.query.filter_by(id=user_id).first()
     if user is None:
         raise PermissionError(response)
 
