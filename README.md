@@ -1,6 +1,7 @@
 # Authsign
 
 [![](https://github.com/plbin97/authsign/actions/workflows/test.yml/badge.svg)](https://github.com/plbin97/authsign/actions/workflows/test.yml)
+[![](https://github.com/plbin97/authsign/actions/workflows/pylint.yml/badge.svg)](https://github.com/plbin97/authsign/actions/workflows/pylint.yml)
 [![](https://github.com/plbin97/authsign/actions/workflows/deploy.yml/badge.svg)](https://github.com/plbin97/authsign/actions/workflows/deploy.yml)
 [![codecov](https://codecov.io/gh/plbin97/authsign/branch/master/graph/badge.svg?token=EBTANVG4WE)](https://codecov.io/gh/plbin97/authsign)
 
