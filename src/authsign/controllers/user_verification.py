@@ -1,7 +1,7 @@
 """Helper module for user verification"""
 from flask import request, Response, make_response
 
-from ..databaseModels import User
+from ..database_models import User
 from ..utils.jwt import verify_jwt
 
 
@@ -21,7 +21,7 @@ def user_verification() -> User:
         raise PermissionError(response)
     user_token: str = request.headers['X-Api-Key']
     try:
-        user_id, = verify_jwt(user_token)
+        user_id, = verify_jwt(user_token)# pylint: disable=unbalanced-tuple-unpacking
     except LookupError as exc:
         raise PermissionError(response) from exc
     if user_id is None:

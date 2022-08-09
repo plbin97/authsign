@@ -2,7 +2,10 @@
 import json
 from flask_restx import Resource
 from flask import request, make_response, Response
-from ..databaseModels import User
+
+from .error_response_factory import error_response_factory
+from .get_username_password_helper import get_username_password_helper
+from ..database_models import User
 from .user_verification import user_verification
 from ..utils.jwt import create_jwt_for_login
 from ..extension import api
@@ -43,23 +46,15 @@ class UserController(Resource):
         Passing a new username and password
         A new token would be generated if successfully sign up.
         """
-        req_data: dict = request.json
-
-        response: Response = make_response()
-        response.status_code = 400
-        response.mimetype = 'text/plain'
-
-        if ('username' not in req_data) or ('password' not in req_data):
-            response.data = 'Lack of parameters'
-            return response
-
-        username: str = req_data['username']
-        password: str = req_data['password']
-
+        response: Response = error_response_factory()
         try:
+            username, password = get_username_password_helper()
             user: User = User.new_user(user_name=username, password=password)
         except ValueError as err:
             response.data = err.args[0]
+            return response
+        except KeyError:
+            response.data = 'Lack of parameters'
             return response
 
         jwt_str: str = create_jwt_for_login(user.id, user.role)

@@ -1,6 +1,6 @@
 import pytest
 
-from src.authsign.databaseModels.user import User
+from src.authsign.database_models.user import User
 from src.authsign.utils.jwt import stop_jwt_activity_manager_thread
 
 testUsername: str = 'panglinbin'
@@ -8,8 +8,8 @@ testAnotherUsername: str = 'linbinpang'
 testPassword: str = 'thisismypassword'
 
 
-def test_init(newApp):
-    with newApp.app_context():
+def test_init(new_app):
+    with new_app.app_context():
         User.delete_user(user_name=testUsername)
         User.delete_user(user_name=testAnotherUsername)
 

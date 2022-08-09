@@ -1,6 +1,7 @@
 """
 Module for managing and storing the JWT data in memory
 """
+# pylint: disable=W0603
 import asyncio
 from threading import Thread
 
