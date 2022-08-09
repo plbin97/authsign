@@ -21,7 +21,7 @@ def user_verification() -> User:
         raise PermissionError(response)
     user_token: str = request.headers['X-Api-Key']
     try:
-        user_id, = verify_jwt(user_token)# pylint: disable=unbalanced-tuple-unpacking
+        user_id, role = verify_jwt(user_token)# pylint: disable=W0612
     except LookupError as exc:
         raise PermissionError(response) from exc
     if user_id is None:

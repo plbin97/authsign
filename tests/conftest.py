@@ -23,6 +23,7 @@ def new_app():
     return refresh_app()
 
 
+@pytest.fixture()
 def client(app):
     """
     get the client
@@ -31,6 +32,7 @@ def client(app):
     return app.test_client()
 
 
+@pytest.fixture()
 def runner(app):
     """
     get the runner

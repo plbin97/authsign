@@ -2,6 +2,7 @@
 from flask import Flask
 from src.authsign import authsign
 from src.authsign.extension import db, migrate
+from src.authsign.database_models.user import User
 
 def create_app():
     """

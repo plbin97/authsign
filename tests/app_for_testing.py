@@ -19,7 +19,7 @@ def refresh_app():
     create a new app that cover the original one
     :return:
     """
-    global APP_INST
+    global APP_INST# pylint: disable=W0603
     APP_INST = create_app()
     APP_INST.config.update({
         "TESTING": True,

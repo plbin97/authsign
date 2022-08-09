@@ -1,8 +1,8 @@
 """
 Unit test
 """
-from src.authsign.utils.jwt.jwt_codec import JwtCodec
 from datetime import datetime, timedelta
+from src.authsign.utils.jwt.jwt_codec import JwtCodec
 
 
 def test_if_working():

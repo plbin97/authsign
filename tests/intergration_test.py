@@ -1,6 +1,8 @@
 """
 Interaction testing
 """
+# pylint: disable=C0301
+# pylint: disable=W0603
 import time
 
 from werkzeug.test import TestResponse

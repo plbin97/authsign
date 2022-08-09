@@ -10,8 +10,6 @@ def test_init(new_app):
     :param new_app:
     :return:
     """
-    new_app()
-
 
 def test_get_swagger(client):
     """
