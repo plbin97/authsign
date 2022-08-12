@@ -1,34 +1,5 @@
-import {userAddr, signInAddr} from "./apiAddr";
-import UserSignInOut from "../models/UserSignInOut";
-
-export const sendRequestForSignin = async (userSignInOut: UserSignInOut): Promise<string | null> => {
-    let response = await fetch(signInAddr, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(userSignInOut)
-    });
-    let resultText = await response.text();
-    if (response.status !== 200) {
-        return null;
-    }
-    return resultText;
-}
-
-export const sendRequestForSignup = async (userSignInOut: UserSignInOut): Promise<string | null> => {
-    let response = await fetch(userAddr, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(userSignInOut)
-    });
-    let resultText = await response.text();
-    if (response.status !== 200) {
-        return null;
-    }
-    return resultText;
-
-}
-
+export * from './send-request-for-sign-in'
+export * from './send-request-for-sign-up'
+export * from './send-request-for-get-user-info'
+export * from './send-request-for-set-user-info'
+export * from './send-request-for-sign-out'

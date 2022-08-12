@@ -1,10 +1,10 @@
-export interface User {
+export type User = {
     id: number
     username: string
-    firstName: string
-    lastName: string
+    first_name: string
+    last_name: string
     email: string
-    emailVerified: string
+    email_verified: boolean
     password: string
     phone: string
     role: string

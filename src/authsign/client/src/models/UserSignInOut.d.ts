@@ -1,4 +1,4 @@
-export default interface UserSignInOut {
+export interface UserSignInOut {
     username: string;
     password: string;
 }

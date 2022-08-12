@@ -1,16 +1,16 @@
-import React from 'react';
-import Signin from './features/signin/Signin'
-import Signup from "./features/signup/Signup";
-import './App.css';
+import React from 'react'
+
+import './App.css'
+import { Counter } from './features/counter/Counter'
 
 class App extends React.Component<any, any> {
-  render() {
+  render () {
     return (
         <div>
-          <Signup />
+          <Counter/>
         </div>
-    );
+    )
   }
 }
 
-export default App;
+export default App
